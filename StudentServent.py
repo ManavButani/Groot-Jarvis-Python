@@ -1,3 +1,4 @@
+from urllib import request
 import pyttsx3 #pip install pyttsx3
 import speech_recognition as sr #pip install speechRecognition
 import datetime
@@ -6,6 +7,12 @@ import webbrowser
 import os
 import smtplib
 import pyaudio
+
+#for location
+import requests
+import json
+
+
 
 '''                             
 "                                                  Project title : Groot
@@ -35,7 +42,7 @@ def wishMe():
     else:
         speak("Good Evening!")  
 
-    speak("I am Groot Sir. Please tell me how may I help you")       
+    speak("I am Student Assistant Sir. Please tell me how may I help you")       
 
 def takeCommand():
     #It takes microphone input from the user and returns string output
@@ -83,12 +90,14 @@ if __name__ == "__main__":
         elif 'open youtube' in query:
             webbrowser.open("youtube.com")
 
+	elif 'open converter' in query:
+            webbrowser.open("ilovepdf.com")
+
         elif 'open google' in query:
             webbrowser.open("google.com")
 
         elif 'open stackoverflow' in query:
             webbrowser.open("stackoverflow.com")   
-
 
         elif 'play music' in query:
             music_dir = 'E:\\vandu katha\\Bhagvat Gita Sanskrit'
@@ -117,7 +126,25 @@ if __name__ == "__main__":
                 speak("Gmail has been sent!")
             except Exception as e:
                 print(e)
-                speak("Yeah my friend , I am able to send")    
+                speak("my friend , I am not able to send")    
+
+        elif 'one' in query or '1' in query:
+            speak("wait sir, let me check")
+            try:
+                ipAdd= requests.get('https://api.ipify.org').text
+                print(ipAdd)
+                url = 'https://get.geojs.io/v1/ip/geo/'+ipAdd+'.json'
+                geo_requests=requests.get(url)
+                geo_data=geo_requests.json()
+                city = geo_data['city']
+                country= geo_data['country']
+                speak(f"we are in a {city} city of {country}")
+                break
+            except Exception as e:
+                speak("Due to network issue i am unable to find location")
+                break
+
 
         elif 'turn off' in query:
+            speak("Ok sir, I am !")
             exit()
